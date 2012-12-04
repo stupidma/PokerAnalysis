@@ -31,6 +31,9 @@ typedef struct PLAYER_INFO {
     NSMutableArray  *players;
     
 //    MemberViewController *membController;
+    
+    IBOutlet UIImageView        *dealer;
+    IBOutlet UISegmentedControl *dealerCtrl;
 }
 @property (nonatomic, assign) id<MemberDelegate> delegate;
 @property (nonatomic, retain) NSMutableArray *players;
@@ -46,4 +49,5 @@ typedef struct PLAYER_INFO {
 //- (IBAction) analysis:(id)sender;
 
 - (IBAction) textFieldDoneEditing:(id)sender;
+//- (IBAction) setDealer:(id)sender;
 @end

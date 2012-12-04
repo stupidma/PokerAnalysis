@@ -32,7 +32,12 @@
 //    self.mebCtrl = [[MemberViewController alloc] init];
     gameState = 0;  // 0 -- initial; 1 -- set player; 2 -- gaming
     
+    [dealerCtrl addTarget:self
+                   action:@selector(dealerChanged:)
+         forControlEvents:UIControlEventValueChanged];
+    dealerCtrl.hidden = YES;
     
+    dealer.hidden = YES;
     
     self.players = [NSMutableArray array];
     
@@ -89,14 +94,31 @@
 //    
 //}
 
-- (IBAction) sitDown:(id)sender {
+- (void) dealerChanged:(id)sender {
+    NSLog( @"setDealr in" );
+    
+    dealNum = [sender selectedSegmentIndex];
+
+    NSLog( @"dealer center.x=%f,y=%f", dealer.center.x, dealer.center.y );
+    
+    [dealer removeFromSuperview];
+    UIButton *btn = (UIButton *)[self.view viewWithTag:dealNum];
+    NSLog( @"btn center.x=%f,y=%f", btn.center.x, btn.center.y );
+//    dealer.center = CGPointMake( btn.center.x, btn.center.y + 50.0f );
+    [self.view insertSubview:dealer atIndex:0];
+
+}
+
+- (IBAction) sitDownBtnPressed:(id)sender {
     gameState = 1;
     
     UIButton *btn = (UIButton *)[self.view viewWithTag:22];
     btn.hidden = NO;
+    
+    dealerCtrl.hidden = NO;
 }
 
-- (IBAction) setPlayer:(id)sender {
+- (IBAction) playerBtnPressed:(id)sender {
     if ( gameState != 1 ) {
         return;
     }
@@ -116,11 +138,13 @@
     
 }
 
-- (IBAction) setPlyerComplete:(id)sender {
+- (IBAction) completeBtnPressed:(id)sender {
     gameState = 2;
     
     UIButton *btn = (UIButton *)[self.view viewWithTag:22];
     btn.hidden = YES;
+    
+    dealerCtrl.hidden = YES;
 }
 
 #pragma mark - delegate
@@ -148,6 +172,6 @@
     
     UIButton *btn = (UIButton *)[_seatView viewWithTag:playerNum];
     [btn setTitle:_name forState:UIControlStateNormal];
-//    btn.titleLabel.text = _name;
+
 }
 @end

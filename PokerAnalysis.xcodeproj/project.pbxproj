@@ -25,6 +25,8 @@
 		4C44443E165C751E00EAA181 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C44443D165C751E00EAA181 /* Default-568h@2x.png */; };
 		4C444441165C751E00EAA181 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C444440165C751E00EAA181 /* ViewController.m */; };
 		4C444444165C751E00EAA181 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C444442165C751E00EAA181 /* ViewController.xib */; };
+		4C5934D3166E386100C7E199 /* dealer.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4C5934D1166E386100C7E199 /* dealer.jpg */; };
+		4C5934D4166E386100C7E199 /* dealr_button.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 4C5934D2166E386100C7E199 /* dealr_button.jpeg */; };
 		4C7B78A1166B95DF00C5FB0A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B789F166B95DF00C5FB0A /* MainViewController.m */; };
 		4C7B78A2166B95DF00C5FB0A /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C7B78A0166B95DF00C5FB0A /* MainViewController.xib */; };
 		4CA455911662669000A3EFA5 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA455901662669000A3EFA5 /* Player.m */; };
@@ -64,6 +66,8 @@
 		4C44443F165C751E00EAA181 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4C444440165C751E00EAA181 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4C444443165C751E00EAA181 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		4C5934D1166E386100C7E199 /* dealer.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dealer.jpg; sourceTree = "<group>"; };
+		4C5934D2166E386100C7E199 /* dealr_button.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dealr_button.jpeg; sourceTree = "<group>"; };
 		4C7B789E166B95DF00C5FB0A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		4C7B789F166B95DF00C5FB0A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		4C7B78A0166B95DF00C5FB0A /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
@@ -111,6 +115,8 @@
 		4C04D8161661EB2A001C6FCA /* Pics */ = {
 			isa = PBXGroup;
 			children = (
+				4C5934D1166E386100C7E199 /* dealer.jpg */,
+				4C5934D2166E386100C7E199 /* dealr_button.jpeg */,
 				4C04D8171661EB41001C6FCA /* desk2_hd@2x.png */,
 				4C04D8181661EB41001C6FCA /* desks_desk_hd@2x.png */,
 			);
@@ -293,6 +299,8 @@
 				4C04D81A1661EB41001C6FCA /* desks_desk_hd@2x.png in Resources */,
 				4CECBA501664C49D00482442 /* dataFormat.txt in Resources */,
 				4C7B78A2166B95DF00C5FB0A /* MainViewController.xib in Resources */,
+				4C5934D3166E386100C7E199 /* dealer.jpg in Resources */,
+				4C5934D4166E386100C7E199 /* dealr_button.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
