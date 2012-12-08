@@ -13,6 +13,7 @@
 		4C04D8141661E598001C6FCA /* MemberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D8121661E598001C6FCA /* MemberViewController.xib */; };
 		4C04D8191661EB41001C6FCA /* desk2_hd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D8171661EB41001C6FCA /* desk2_hd@2x.png */; };
 		4C04D81A1661EB41001C6FCA /* desks_desk_hd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D8181661EB41001C6FCA /* desks_desk_hd@2x.png */; };
+		4C0D30981671E571002E9329 /* Players.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0D30971671E571002E9329 /* Players.m */; };
 		4C36A9DF1663C022000C4B18 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C36A9DE1663C022000C4B18 /* libsqlite3.dylib */; };
 		4C444428165C751E00EAA181 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C444427165C751E00EAA181 /* UIKit.framework */; };
 		4C44442A165C751E00EAA181 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C444429165C751E00EAA181 /* Foundation.framework */; };
@@ -48,6 +49,8 @@
 		4C04D8121661E598001C6FCA /* MemberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MemberViewController.xib; sourceTree = "<group>"; };
 		4C04D8171661EB41001C6FCA /* desk2_hd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "desk2_hd@2x.png"; sourceTree = "<group>"; };
 		4C04D8181661EB41001C6FCA /* desks_desk_hd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "desks_desk_hd@2x.png"; sourceTree = "<group>"; };
+		4C0D30961671E571002E9329 /* Players.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Players.h; sourceTree = "<group>"; };
+		4C0D30971671E571002E9329 /* Players.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Players.m; sourceTree = "<group>"; };
 		4C36A9DC1663BCE9000C4B18 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		4C36A9DE1663C022000C4B18 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		4C444423165C751E00EAA181 /* PokerAnalysis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokerAnalysis.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -205,6 +208,8 @@
 				4C04D80D1661E57E001C6FCA /* AnalysisViewController.xib */,
 				4CECBA2016649BD000482442 /* DataOp.h */,
 				4CECBA2116649BD000482442 /* DataOp.m */,
+				4C0D30961671E571002E9329 /* Players.h */,
+				4C0D30971671E571002E9329 /* Players.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -324,6 +329,7 @@
 				4CECBA431664BF9800482442 /* FMDatabaseQueue.m in Sources */,
 				4CECBA451664BF9800482442 /* FMResultSet.m in Sources */,
 				4C7B78A1166B95DF00C5FB0A /* MainViewController.m in Sources */,
+				4C0D30981671E571002E9329 /* Players.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

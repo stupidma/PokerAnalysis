@@ -8,16 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MemberDelegate.h"
+#import "config.h"
 
 @class RecordViewController;
 @class AnalysisViewController;
 @class MemberViewController;
-
-typedef struct PLAYER_INFO {
-    NSString *player_name;
-    int seat_num;
-    int player_id;
-}_PLAYER_INFO;
+@class Players;
 
 @interface ViewController : UIViewController <MemberDelegate> {
 //    RecordViewController    *reCtrl;
@@ -27,16 +23,26 @@ typedef struct PLAYER_INFO {
     int gameState;
     int playerNum;
     int dealNum;
+    int gameStage;
+    int curPlayer;
     
-    NSMutableArray  *players;
+//    NSMutableArray  *players;
+
     
 //    MemberViewController *membController;
     
     IBOutlet UIImageView        *dealer;
     IBOutlet UISegmentedControl *dealerCtrl;
+    IBOutlet UIButton           *startBtn;
+    IBOutlet UIButton           *foldBtn;
+    IBOutlet UIButton           *checkBtn;
+    IBOutlet UIButton           *callBtn;
+    IBOutlet UIButton           *raiseBtn;
+    
+    Players     *allPlayers;
 }
 @property (nonatomic, assign) id<MemberDelegate> delegate;
-@property (nonatomic, retain) NSMutableArray *players;
+//@property (nonatomic, retain) NSMutableArray *players;
 @property (nonatomic, retain) MemberViewController *membController;
 @property (nonatomic, retain) IBOutlet UIView *seatView;
 
@@ -50,4 +56,15 @@ typedef struct PLAYER_INFO {
 
 - (IBAction) textFieldDoneEditing:(id)sender;
 //- (IBAction) setDealer:(id)sender;
+
+- (IBAction) fold:(id)sender;
+- (IBAction) check:(id)sender;
+- (IBAction) call:(id)sender;
+- (IBAction) raise:(id)sender;
+- (IBAction) start:(id)sender;
+
+- (void) interfaceInit;
+- (void) setCurrentPlayer;
+- (void) settingButton;
+- (void) gamingButton;
 @end

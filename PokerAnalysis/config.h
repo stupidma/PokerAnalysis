@@ -38,4 +38,5 @@
 
 //typedef struct player_info;
 
+#define TOTAL_PLAYERS   9
 #endif
