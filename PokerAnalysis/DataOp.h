@@ -43,4 +43,5 @@ river_action INTEGER)"
 + (NSMutableDictionary *) allPlayers;
 + (BOOL) createPlayer:(NSString *)_name;
 + (BOOL) isPlayerExisted:(NSString *)_name DB:(FMDatabase *)_db;
++ (void) saveRecord:(NSString *)_process step:(int)_gameStage;
 @end

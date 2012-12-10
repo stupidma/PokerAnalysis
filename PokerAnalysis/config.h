@@ -39,4 +39,8 @@
 //typedef struct player_info;
 
 #define TOTAL_PLAYERS   9
+
+#define DEAD        0
+#define ALIVE       1
+
 #endif

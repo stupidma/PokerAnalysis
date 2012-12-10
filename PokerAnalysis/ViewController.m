@@ -35,24 +35,29 @@
     gameStage = PREFLOP;
     curPlayer = -1;
     
+    btnFontColor = [[startBtn titleColorForState:UIControlStateNormal] retain];
+    
     allPlayers = [[Players alloc] init];
     allPlayers.count = 0;
+    allPlayers.aliveCount = 0;
     
     [DataOp createTable];
     
     _membController = [[MemberViewController alloc] initWithNibName:@"MemberViewController" bundle:nil];
     _membController.delegate = self;
     
-//    self.view = _seatView;
-    
     [self interfaceInit];
-    [self.view insertSubview:_seatView atIndex:0];
+//    [self.view insertSubview:_seatView atIndex:0];
+    [self.view addSubview:_seatView];
+    NSLog(@"viewdid");
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemorWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"memorywarning");
 }
 
 - (void) dealloc {
@@ -63,8 +68,27 @@
     _membController = nil;
     _seatView = nil;
     allPlayers = nil;
+    btnFontColor = nil;
     
     [super dealloc];
+}
+
+- (void) setCurrentPlayer {
+    if ( curPlayer != -1 ) {
+        UIButton *preBtn = (UIButton *)[_seatView viewWithTag:curPlayer];
+        [preBtn setTitleColor:btnFontColor forState:UIControlStateNormal];
+    }
+    
+    assert( gameStage == PREFLOP );
+    
+    curPlayer = [allPlayers currentPlayer:dealNum];
+    
+    assert( curPlayer );
+    
+    NSLog( @"ViewController:setCurrentPlayer curPlayer num=%d", curPlayer );
+    
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
 }
 
 - (void) settingButton {
@@ -74,8 +98,8 @@
     callBtn.hidden = YES;
     raiseBtn.hidden = YES;
     
-    UIButton *btn = (UIButton *)[self.view viewWithTag:22];
-    btn.hidden = YES;
+//    UIButton *btn = (UIButton *)[_seatView viewWithTag:22];
+//    btn.hidden = YES;
 }
 
 - (void) gamingButton {
@@ -92,7 +116,7 @@
          forControlEvents:UIControlEventValueChanged];
     dealerCtrl.hidden = NO;
     
-    dealer.hidden = NO;
+    dealerImage.hidden = NO;
     
     [self settingButton];
 }
@@ -141,28 +165,121 @@
 //    NSLog( @"ViewController:setCurrentPlayer current player=%d", curPlayer );
 //}
 
+- (void) nextPlayer {
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:btnFontColor forState:UIControlStateNormal];
+    
+    curPlayer = [allPlayers nextPlayerWithCurrentPlayer:curPlayer endPlayer:endPlayerNum];
+    
+    btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+}
+
+- (void) nextStage {
+    assert( gameStage >= PREFLOP && gameStage <= RIVER );
+    
+    [DataOp saveRecord:process step:gameStage];
+    
+    if ( gameStage == RIVER ) {
+        [self resetStage];
+    }else {
+        curPlayer = [allPlayers playerWithDealer:dealNum num:1];
+    }
+}
+
+- (void) resetStage {
+    gameStage = PREFLOP;
+    
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:btnFontColor forState:UIControlStateNormal];
+    
+    dealNum = [allPlayers playerWithDealer:dealNum num:1];
+    curPlayer = [allPlayers currentPlayer:dealNum];
+    
+    btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+}
+
 #pragma mark - selector
 
-- (IBAction) start:(id)sender {
+- (IBAction) startBtnPress:(id)sender {
     [allPlayers closeCycle];
     
     [self gamingButton];
+    [self setCurrentPlayer];
+    
+    process = [NSString stringWithFormat:@"%d|0|%d|", gameStage, [allPlayers count]];
+    
+    assert( gameStage == PREFLOP );
+    
+    endPlayerNum = [allPlayers endPlayerWithDealer:dealNum];
+    
+#ifdef DEBUG
+    NSLog( @"dealerImage x=%f,y=%f", dealerImage.center.x, dealerImage.center.y );
+#endif
+    
 }
 
 - (IBAction) fold:(id)sender {
+    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
+    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, FOLD];
+    
+#ifdef DEBUG
+    NSLog( @"fold process=%@", process );
+#endif
+    
+    if ( curPlayer == endPlayerNum ) {
+        [self nextStage];
+    }else {
+        [allPlayers playerFold:curPlayer];
+        [self nextPlayer];
+    }
 }
 
 - (IBAction) check:(id)sender {
+    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
+    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, CHECK];
+    
+#ifdef DEBUG
+    NSLog( @"check process=%@", process );
+#endif
+    
+    if ( curPlayer == endPlayerNum ) {
+        [self nextStage];
+    }else {
+        [self nextPlayer];
+    }
 }
 
 - (IBAction) call:(id)sender {
+    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
+    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, CALL];
+    
+#ifdef DEBUG
+    NSLog( @"call process=%@", process );
+#endif
+
+    if ( [allPlayers isLastPlayer:curPlayer] ) {
+        [self nextStage];
+    }else {
+        [self nextPlayer];
+    }
+
 }
 
 - (IBAction) raise:(id)sender {
+    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
+    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, RAISE];
+    
+    [self raiseNextPlayer];
+    
+#ifdef DEBUG
+    NSLog( @"raise process=%@", process );
+#endif
 }
 
 //- (IBAction) textFieldDoneEditing:(id)sender {
@@ -195,11 +312,15 @@
 
     NSLog( @"dealer num=%d", dealNum );
     
-    UIButton *btn = (UIButton *)[self.view viewWithTag:dealNum];
-    NSLog( @"btn center.x=%f,y=%f", btn.center.x, btn.center.y );
-    dealer.center = CGPointMake( btn.center.x, btn.center.y + 40.0f );
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:dealNum];
     
-    [self setCurrentPlayer];
+//    dealerImage.center = CGPointMake( btn.center.x, btn.center.y + 40.0f );
+    
+    [dealerImage setFrame:CGRectMake( btn.center.x, btn.center.y + 40.f, dealerImage.frame.size.width, dealerImage.frame.size.height )];
+#ifdef DEBUG
+    NSLog( @"dealerImage x=%f,y=%f", dealerImage.center.x, dealerImage.center.y );
+#endif
+//    [self setCurrentPlayer];
 }
 
 - (IBAction) sitDownBtnPressed:(id)sender {
@@ -209,7 +330,7 @@
     
     [self settingButton];
     
-    UIButton *btn = (UIButton *)[self.view viewWithTag:22];
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:22];
     btn.hidden = NO;
     
     dealerCtrl.hidden = NO;
@@ -228,14 +349,15 @@
 //    [self.view addSubview:_membController];
 
     [_seatView removeFromSuperview];
-    [self.view insertSubview:_membController.view atIndex:0];
+    [self.view addSubview:_membController.view];
+//    [self.view insertSubview:_membController.view atIndex:0];
 }
 
 
 - (IBAction) completeBtnPressed:(id)sender {
     gameState = 2;
     
-    UIButton *btn = (UIButton *)[self.view viewWithTag:22];
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:22];
     btn.hidden = YES;
     
     dealerCtrl.hidden = YES;
@@ -248,7 +370,8 @@
 #pragma mark - delegate
 - (void) cancelMemberView {
     [_membController.view removeFromSuperview];
-    [self.view insertSubview:_seatView atIndex:0];
+//    [self.view insertSubview:_seatView atIndex:0];
+    [self.view addSubview:_seatView];
 }
 
 - (void) selectedPlayer:(NSString *)_name id:(int)_id {
@@ -260,6 +383,7 @@
     p->player_name = [_name copy];
     p->player_id = _id;
     p->seat_num = playerNum;
+    p->player_state = ALIVE;
     p->next = nil;
     
     [allPlayers insertPlayer:p];

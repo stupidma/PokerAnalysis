@@ -25,13 +25,16 @@
     int dealNum;
     int gameStage;
     int curPlayer;
+    int endPlayerNum;
+    
+    NSString *process;
     
 //    NSMutableArray  *players;
 
-    
+    UIColor     *btnFontColor;
 //    MemberViewController *membController;
     
-    IBOutlet UIImageView        *dealer;
+    IBOutlet UIImageView        *dealerImage;
     IBOutlet UISegmentedControl *dealerCtrl;
     IBOutlet UIButton           *startBtn;
     IBOutlet UIButton           *foldBtn;
@@ -67,4 +70,8 @@
 - (void) setCurrentPlayer;
 - (void) settingButton;
 - (void) gamingButton;
+- (void) nextStage;
+- (void) nextPlayer;
+- (void) raiseNextPlayer;
+- (void) resetStage;
 @end
