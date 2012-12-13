@@ -26,7 +26,9 @@
     int gameStage;
     int curPlayer;
     int endPlayerNum;
+    int pot;
     
+    NSMutableArray *procArray;
     NSString *process;
     
 //    NSMutableArray  *players;
@@ -74,4 +76,5 @@
 - (void) nextPlayer;
 - (void) raiseNextPlayer;
 - (void) resetStage;
+- (void) saveProcess:(NSString *)_process;
 @end

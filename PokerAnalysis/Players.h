@@ -35,7 +35,10 @@ typedef struct PLAYER_INFO {
 - (int) endPlayerWithDealer:(int)_dealerNum;
 - (int) nextPlayerWithCurrentPlayer:(int)_seatNum endPlayer:(int)_endSeatNum;
 - (void) playerFold:(int)_seatNum;
-- (int) nextDealerWithNum:(int)_dealerNum;
-- (int) smallBlindWithNum:(int)_dealerNum;
+//- (int) nextDealerWithNum:(int)_dealerNum;
+//- (int) smallBlindWithNum:(int)_dealerNum;
 - (int) playerWithDealer:(int)_dealerNum num:(int)_num;
+- (int) endPlayerWithRaiser:(int)_seatNum;
+- (void) resetPlayers;
 @end
+

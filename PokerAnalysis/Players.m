@@ -112,16 +112,18 @@
     assert( listTail );
     
     _PLAYER_INFO *p = listHead;
+    int m = 1;
     while ( p ) {
-        if ( p->seat_num == _seatNum ) {
-            break;
-        }
-        
-        if ( p->seat_num == _endSeatNum ) {
+        if ( p == listHead && m == 0 ) {
             assert( nil );
             return 0;
         }
         
+        if ( p->seat_num == _seatNum ) {
+            break;
+        }
+
+        m = 0;
         p = p->next;
     }
     
@@ -162,7 +164,12 @@
         p = p->next;
     }
     
+#ifdef DEBUG
+    NSLog( @"Players:endPlayerWithDealer endplayer=%d", p->seat_num );
+#endif
+    
     return p->seat_num;
+    
 }
 
 - (int) nextPlayerWithCurrentPlayer:(int)_seatNum endPlayer:(int)_endSeatNum {
@@ -171,20 +178,22 @@
     assert( listTail );
 
     _PLAYER_INFO *p = listHead;
+    int m = 1;
     // find the current player
     while ( p ) {
+        if ( p == listHead && m == 0 ) {
+            assert( nil );
+            return 0;
+        }
+        
         if ( p->seat_num == _seatNum ) {
             assert( p->next );
             p = p->next;
             break;
         }
         
-        if ( p->seat_num == _endSeatNum ) {
-            assert( nil );
-            return 0;
-        }
-        
         p = p->next;
+        m = 0;
     }
     
     assert( p );
@@ -209,11 +218,19 @@
     assert( listTail );
     
     _PLAYER_INFO *p = listHead;
+    int m = 1;
     while ( p ) {
+        if ( p == listHead && m == 0 ) {
+            assert( nil );
+            return;
+        }
+        
         if ( p->seat_num == _seatNum ) {
             p->player_state = DEAD;
             break;
         }
+        
+        p = p->next;
     }
     
     assert( aliveCount > 0 );
@@ -224,36 +241,36 @@
 #endif
 }
 
-- (int) nextDealerWithNum:(int)_dealerNum {
-    assert( _dealerNum );
-    assert( listHead );
-    assert( listTail );
-    
-    _PLAYER_INFO *p = listHead;
-    int m = 1;
-    while ( p ) {
-        if ( p == listHead && m == 0 ) {
-            assert( nil );
-            return 0;
-        }
-        
-        if ( p->seat_num == _dealerNum ) {
-            assert( p->next );
-            p = p->next;
-            break;
-        }
-        
-        assert( p->next );
-        p = p->next;
-        m = 0;
-    }
-    
-    return p->seat_num;
-}
-
-- (int) smallBlindWithNum:(int)_dealerNum {
-    assert( _dealerNum );
-}
+//- (int) nextDealerWithNum:(int)_dealerNum {
+//    assert( _dealerNum );
+//    assert( listHead );
+//    assert( listTail );
+//    
+//    _PLAYER_INFO *p = listHead;
+//    int m = 1;
+//    while ( p ) {
+//        if ( p == listHead && m == 0 ) {
+//            assert( nil );
+//            return 0;
+//        }
+//        
+//        if ( p->seat_num == _dealerNum ) {
+//            assert( p->next );
+//            p = p->next;
+//            break;
+//        }
+//        
+//        assert( p->next );
+//        p = p->next;
+//        m = 0;
+//    }
+//    
+//    return p->seat_num;
+//}
+//
+//- (int) smallBlindWithNum:(int)_dealerNum {
+//    assert( _dealerNum );
+//}
 
 - (int) playerWithDealer:(int)_dealerNum num:(int)_num {
     assert( _dealerNum );
@@ -286,5 +303,48 @@
     }
     
     return p->seat_num;
+}
+
+- (int) endPlayerWithRaiser:(int)_seatNum {
+    assert( _seatNum );
+    assert( listHead );
+    assert( listTail );
+    
+    _PLAYER_INFO *p = listHead;
+    assert( p->next );
+    while ( p ) {
+        if ( p->next->seat_num == _seatNum ) {
+            break;
+        }
+        
+        if ( p == listTail ) {
+            assert( nil );
+            return 0;
+        }
+        
+        p = p->next;
+    }
+    
+#ifdef DEBUG
+    NSLog( @"Players:endPlayerWithRaiser curPlayer=%d, endPlayer=%d", _seatNum, p->seat_num );
+#endif
+    
+    return p->seat_num;
+}
+
+- (void) resetPlayers {
+    aliveCount = count;
+    
+    _PLAYER_INFO *p = listHead;
+    assert( p );
+    while ( p ) {
+        p->player_state = ALIVE;
+        
+        if ( p == listTail ) {
+            break;
+        }
+        
+        p = p->next;
+    }
 }
 @end

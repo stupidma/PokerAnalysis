@@ -18,10 +18,10 @@ total_pots INTEGER)"
 
 #define T_DATA          @"t_data"
 #define C_T_DATA        @"create table t_data(hand_id INTEGER PRIMARY KEY,\
-preflop INTEGER,\
-postflop INTEGER,\
-turn, INTEGER,\
-river INTEGER)"
+preflop TEXT,\
+postflop TEXT,\
+turn TEXT,\
+river TEXT)"
 
 #define T_PLAYER        @"t_player"
 #define C_T_PLAYER      @"create table t_player(player_id INTEGER PRIMARY KEY,\
@@ -43,5 +43,5 @@ river_action INTEGER)"
 + (NSMutableDictionary *) allPlayers;
 + (BOOL) createPlayer:(NSString *)_name;
 + (BOOL) isPlayerExisted:(NSString *)_name DB:(FMDatabase *)_db;
-+ (void) saveRecord:(NSString *)_process step:(int)_gameStage;
++ (void) saveRecord:(NSMutableArray *)_process;
 @end

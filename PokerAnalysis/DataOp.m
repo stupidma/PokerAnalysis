@@ -9,6 +9,7 @@
 #import "DataOp.h"
 #import "FMDatabase.h"
 #import "FMDatabaseAdditions.h"
+#import "config.h"
 
 @implementation DataOp
 
@@ -141,4 +142,57 @@
     return NO;
 }
 
++ (void) saveRecord:(NSMutableArray *)_process {
+    assert( _process );
+    
+#ifdef DEBUG
+    for ( int i = 0; i < [_process count]; i++) {
+        NSLog( @"saveRecord process=%@, gameStage=%d", [_process objectAtIndex:i], i+1 );
+    }
+#endif
+    
+    NSString *p = nil;
+    for ( int i = 0; i < RIVER; i++ ) {
+        if ( i == 0 ) {
+            p = [NSString stringWithFormat:@"'%@'", [_process objectAtIndex:i]];
+        }else {
+            if ( i < [_process count] ) {
+                p = [NSString stringWithFormat:@"%@,'%@'", p, [_process objectAtIndex:i]];
+            }else {
+                p = [NSString stringWithFormat:@"%@,NULL", p];
+            }
+        }
+    }
+    
+    NSString *sql = [NSString stringWithFormat:@"insert into t_data (preflop,postflop,turn,river) values(%@)", p];
+    
+#ifdef DEBUG
+    NSLog( @"saveRecord p=%@", sql );
+#endif
+    
+    NSString *dbFilePath = [self getFilePath:DBFile];
+    FMDatabase *db = [FMDatabase databaseWithPath:dbFilePath];
+    if ( [db open] ) {
+        [db setShouldCacheStatements:YES];
+        
+        [db beginTransaction];
+        
+        [db executeUpdate:sql];
+		
+		if ([db hadError]) {
+			NSLog(@"Err %d %@",[db lastErrorCode],[db lastErrorMessage]);
+			[db rollback];
+			[db close];
+			return;
+		}
+		
+		[db commit];
+		[db close];
+		return;
+    }else {
+        NSLog( @"Could not open database" );
+        return;
+    }
+    
+}
 @end

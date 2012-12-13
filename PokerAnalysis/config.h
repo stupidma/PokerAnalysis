@@ -9,10 +9,10 @@
 #ifndef PokerAnalysis_config_h
 #define PokerAnalysis_config_h
 
-#define PREFLOP     0
-#define POSTFLOP    1
-#define TURN        2
-#define RIVER       3
+#define PREFLOP     1
+#define POSTFLOP    2
+#define TURN        3
+#define RIVER       4
 
 #define LIMP        1
 #define RAISE       2

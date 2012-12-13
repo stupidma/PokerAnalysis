@@ -34,6 +34,9 @@
     gameState = 0;  // 0 -- initial; 1 -- set player; 2 -- gaming
     gameStage = PREFLOP;
     curPlayer = -1;
+    pot = 0;
+    
+    procArray = [[NSMutableArray array] retain];
     
     btnFontColor = [[startBtn titleColorForState:UIControlStateNormal] retain];
     
@@ -65,6 +68,8 @@
 //    self.anCtrl = nil;
 //    self.mebCtrl = nil;
 //    _players = nil;
+    [procArray release];
+    
     _membController = nil;
     _seatView = nil;
     allPlayers = nil;
@@ -178,13 +183,28 @@
 - (void) nextStage {
     assert( gameStage >= PREFLOP && gameStage <= RIVER );
     
-    [DataOp saveRecord:process step:gameStage];
-    
     if ( gameStage == RIVER ) {
+        [DataOp saveRecord:procArray];
         [self resetStage];
+        return;
     }else {
+        UIButton *btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+        [btn setTitleColor:btnFontColor forState:UIControlStateNormal];
+        
         curPlayer = [allPlayers playerWithDealer:dealNum num:1];
+        
+        btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+        [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+        
+        endPlayerNum = dealNum;
+        gameStage++;
+        
+        assert( gameStage > PREFLOP && gameStage <= RIVER );
     }
+    
+    NSString *p = process;
+    process = [[NSString alloc] initWithFormat:@"%d|%d|%d|", gameStage, pot, allPlayers.aliveCount];
+    [p release];
 }
 
 - (void) resetStage {
@@ -195,9 +215,42 @@
     
     dealNum = [allPlayers playerWithDealer:dealNum num:1];
     curPlayer = [allPlayers currentPlayer:dealNum];
+    endPlayerNum = [allPlayers endPlayerWithDealer:dealNum];
+    [allPlayers resetPlayers];
+    
+    [procArray removeAllObjects];
+    
+    [process release];
+    
+    process = [[NSString alloc] initWithFormat:@"%d|0|%d|", gameStage, [allPlayers count]];
+    
+#ifdef DEBUG
+    NSLog( @"ViewController:resetStage process=%@,dealNum=%d,curPlayer=%d,endPlayer=%d", process, dealNum, curPlayer, endPlayerNum );
+#endif
     
     btn = (UIButton *)[_seatView viewWithTag:curPlayer];
     [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+}
+
+- (void) raiseNextPlayer {
+    assert( gameStage >= PREFLOP && gameStage <= RIVER );
+    
+    UIButton *btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:btnFontColor forState:UIControlStateNormal];
+
+    endPlayerNum = [allPlayers endPlayerWithRaiser:curPlayer];
+    curPlayer = [allPlayers nextPlayerWithCurrentPlayer:curPlayer endPlayer:endPlayerNum];
+    
+    btn = (UIButton *)[_seatView viewWithTag:curPlayer];
+    [btn setTitleColor:[UIColor colorWithRed:255 green:0 blue:0 alpha:1] forState:UIControlStateNormal];
+    
+#ifdef DEBUG
+    NSLog( @"ViewController:raiseNextPlayer curPlayer=%d, endPlayer=%d", curPlayer, endPlayerNum );
+#endif
+}
+
+- (void)saveProcess:(NSString *)_process {
+    [procArray insertObject:_process atIndex:gameStage-1];
 }
 
 #pragma mark - selector
@@ -208,45 +261,65 @@
     [self gamingButton];
     [self setCurrentPlayer];
     
-    process = [NSString stringWithFormat:@"%d|0|%d|", gameStage, [allPlayers count]];
+    process = [[NSString alloc] initWithFormat:@"%d|0|%d|", gameStage, [allPlayers count]];
     
     assert( gameStage == PREFLOP );
     
     endPlayerNum = [allPlayers endPlayerWithDealer:dealNum];
     
 #ifdef DEBUG
-    NSLog( @"dealerImage x=%f,y=%f", dealerImage.center.x, dealerImage.center.y );
+    NSLog( @"dealerImage x=%f,y=%f.dealNum=%d, endNum=%d", dealerImage.center.x, dealerImage.center.y, dealNum, endPlayerNum );
 #endif
     
 }
 
 - (IBAction) fold:(id)sender {
-    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
+    int playerID = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
-    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, FOLD];
+    NSString *p = process;
+    
+    process = [[NSString alloc] initWithFormat:@"%@%d|%d|", process, playerID, FOLD];
+    
+    [p release];
     
 #ifdef DEBUG
     NSLog( @"fold process=%@", process );
 #endif
     
     if ( curPlayer == endPlayerNum ) {
-        [self nextStage];
+        [procArray insertObject:process atIndex:gameStage-1];
+        if ( allPlayers.aliveCount == 2 ) {
+            [DataOp saveRecord:procArray];
+            [self resetStage];
+        }else {
+            [self nextStage];
+        }
+    
     }else {
         [allPlayers playerFold:curPlayer];
-        [self nextPlayer];
+        if ( allPlayers.aliveCount == 1 ) {
+            [procArray insertObject:process atIndex:gameStage-1];
+            [DataOp saveRecord:procArray];
+            [self resetStage];
+        }else {
+            [self nextPlayer];
+        }
     }
 }
 
 - (IBAction) check:(id)sender {
-    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
+    int playerID = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
-    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, CHECK];
+    NSString *p = process;
+    process = [[NSString alloc] initWithFormat:@"%@%d|%d|", process, playerID, CHECK];
+    [p release];
     
 #ifdef DEBUG
     NSLog( @"check process=%@", process );
 #endif
     
     if ( curPlayer == endPlayerNum ) {
+        [procArray insertObject:process atIndex:gameStage-1];
         [self nextStage];
     }else {
         [self nextPlayer];
@@ -254,15 +327,18 @@
 }
 
 - (IBAction) call:(id)sender {
-    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
-    
-    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, CALL];
+    int playerID = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
+
+    NSString *p = process;
+    process = [[NSString alloc] initWithFormat:@"%@%d|%d|", process, playerID, CALL];
+    [p release];
     
 #ifdef DEBUG
     NSLog( @"call process=%@", process );
 #endif
 
-    if ( [allPlayers isLastPlayer:curPlayer] ) {
+    if ( curPlayer == endPlayerNum ) {
+        [procArray insertObject:process atIndex:gameStage-1];
         [self nextStage];
     }else {
         [self nextPlayer];
@@ -271,9 +347,11 @@
 }
 
 - (IBAction) raise:(id)sender {
-    int id = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
+    int playerID = [allPlayers playerIDWithSeatNum:curPlayer endPlayer:endPlayerNum];
     
-    process = [process stringByAppendingFormat:@"%@%d|%d|", process, id, RAISE];
+    NSString *p = process;
+    process = [[NSString alloc] initWithFormat:@"%@%d|%d|", process, playerID, RAISE];
+    [p release];
     
     [self raiseNextPlayer];
     
