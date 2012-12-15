@@ -166,6 +166,7 @@
 		4C44442D165C751E00EAA181 /* PokerAnalysis */ = {
 			isa = PBXGroup;
 			children = (
+				4CEF9230167CB42E00DE7E83 /* 3rd */,
 				4CECBA461664C0D300482442 /* Record */,
 				4CECBA231664BBBF00482442 /* FMDB */,
 				4CECBA1E16649BA600482442 /* Data */,
@@ -240,6 +241,13 @@
 				4C7B78A3166BA12400C5FB0A /* MemberDelegate.h */,
 			);
 			name = Record;
+			sourceTree = "<group>";
+		};
+		4CEF9230167CB42E00DE7E83 /* 3rd */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = 3rd;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

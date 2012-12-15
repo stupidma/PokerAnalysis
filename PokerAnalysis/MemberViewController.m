@@ -8,6 +8,8 @@
 
 #import "MemberViewController.h"
 #import "DataOp.h"
+#import "config.h"
+#import "AnalysisViewController.h"
 
 @interface MemberViewController ()
 
@@ -15,6 +17,7 @@
 
 @implementation MemberViewController
 
+@synthesize analysisCtrl;
 @synthesize players = _players;
 @synthesize delegate;
 
@@ -55,6 +58,12 @@
 
     // should be deleted when implment complete ???
     [DataOp createTable];
+    
+    [mebCtrl addTarget:self action:@selector(mebCtrlChanged:) forControlEvents:UIControlEventValueChanged];
+    type = MEMBER_SET;
+    
+    analysisCtrl = [[AnalysisViewController alloc] initWithNibName:@"AnalysisViewController" bundle:nil];
+    
 #ifdef DEBUG
     for ( NSString *s in [self.players allValues] ) {
         NSLog( @"MemberViewController:viewDidLoad value:%@", s );
@@ -75,6 +84,21 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) playerSelected:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    [delegate selectedPlayer:_name playerID:_id];
+    [delegate cancelMemberView];
+}
+- (void) playerAnalysis:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    [analysisCtrl displayWithPlayerName:_name playerID:_id];
+    [self.view addSubview:analysisCtrl.view];
 }
 
 #pragma mark - Table view data source
@@ -113,8 +137,15 @@
     NSUInteger  row = [indexPath row];
     NSString *player_name = [_players objectForKey:[NSString stringWithFormat:@"%d", row+1]];
     
-    [delegate selectedPlayer:player_name id:row+1];
-    [delegate cancelMemberView];
+    switch ( type ) {
+        case MEMBER_SET:
+            [self playerSelected:player_name playerID:row+1];
+            break;
+        case MEMBER_ANALYSIS:
+            [self playerAnalysis:player_name playerID:row+1];
+        default:
+            break;
+    }
 }
 /*
 // Override to support conditional editing of the table view.
@@ -162,6 +193,13 @@
 }
 
 #pragma mark - selector
+- (void) mebCtrlChanged:(id)_sender {
+    type = [_sender selectedSegmentIndex]+1;
+    
+#ifdef DEBUG
+    NSLog( @"MemberViewController:mebCtrlChanged type=%d", type );
+#endif
+}
 
 - (IBAction) addMember:(id)_sender {
     NSLog( @"MemberViewController:addMember" );

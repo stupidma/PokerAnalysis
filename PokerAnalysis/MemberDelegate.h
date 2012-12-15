@@ -12,5 +12,5 @@
 
 - (void) cancelMemberView;
 
-- (void) selectedPlayer:(NSString *)_name id:(int)_id;
+- (void) selectedPlayer:(NSString *)_name playerID:(int)_id;
 @end

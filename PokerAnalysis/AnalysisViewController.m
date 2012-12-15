@@ -7,6 +7,8 @@
 //
 
 #import "AnalysisViewController.h"
+#import "DataOp.h"
+#import "config.h"
 
 @interface AnalysisViewController ()
 
@@ -35,4 +37,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) displayWithPlayerName:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    NSArray *preflopData = [DataOp dataWithStage:PREFLOP];
+    NSArray *postflopData = [DataOp postflopDataWithPlayerName:_name playerID:_id];
+    NSArray *turnData = [DataOp turnDataWithPlayerName:_name playerID:_id];
+    NSArray *riverData = [DataOp riverDataWithPlayerName:_name playerID:_id];
+    
+    NSArray *playerPreData = [self analysis:preflopData];
+    
+    preCheck.text = [preflopData objectAtIndex:0];
+}
+
+- (NSArray *) analysis:(NSArray *)_data {
+    assert( _data );
+    
+    
+}
 @end

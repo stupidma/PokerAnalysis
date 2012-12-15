@@ -452,7 +452,7 @@
     [self.view addSubview:_seatView];
 }
 
-- (void) selectedPlayer:(NSString *)_name id:(int)_id {
+- (void) selectedPlayer:(NSString *)_name playerID:(int)_id {
     NSLog( @"ViewController:selectedPlayer in" );
     
     assert( _name );

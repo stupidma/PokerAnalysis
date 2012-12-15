@@ -44,4 +44,10 @@ river_action INTEGER)"
 + (BOOL) createPlayer:(NSString *)_name;
 + (BOOL) isPlayerExisted:(NSString *)_name DB:(FMDatabase *)_db;
 + (void) saveRecord:(NSMutableArray *)_process;
+
++ (NSArray *) preflopDataWithPlayerName:(NSString *)_name playerID:(int)_id;
++ (NSArray *) postflopDataWithPlayerName:(NSString *)_name playerID:(int)_id;
++ (NSArray *) turnDataWithPlayerName:(NSString *)_name playerID:(int)_id;
++ (NSArray *) riverDataWithPlayerName:(NSString *)_name playerID:(int)_id;
++ (NSArray *) dataWithStage:(int)_stage;
 @end

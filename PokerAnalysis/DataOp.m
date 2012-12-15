@@ -195,4 +195,105 @@
     }
     
 }
+
++ (NSArray *) dataWithStage:(int)_stage {
+    assert( _stage );
+    assert( _name );
+    assert( _id );
+    
+    NSString *gameStage = nil;
+    switch ( _stage ) {
+        case PREFLOP:
+            gameStage = [NSString stringWithFormat:@"preflop"];
+            break;
+        case POSTFLOP:
+            gameStage = [NSString stringWithFormat:@"postflop"];
+            break;
+        case TURN:
+            gameStage = [NSString stringWithFormat:@"turn"];
+            break;
+        case RIVER:
+            gameStage = [NSString stringWithFormat:@"river"];
+            break;
+        default:
+            assert( nil );
+            return nil;
+            break;
+    }
+    
+    NSString *sql = [NSString stringWithFormat:@"select %@ from t_data", gameStage];
+    NSString *dbFilePath=[self getFilePath:DBFile];
+	FMDatabase *db=[FMDatabase databaseWithPath:dbFilePath];
+    if ( [db open] ) {
+        [db setShouldCacheStatements:YES];
+        NSMutableArray *data = [NSMutableArray array];
+        
+        FMResultSet *rs = [db executeQuery:sql];
+        int col = sqlite3_column_count(rs.statement.statement);
+        while ([rs next]) {
+            for (int i=0; i<col; i++) {
+                [data addObject:[rs stringForColumnIndex:i]];
+            }
+        }
+        
+        [rs close];
+        [db close];
+        
+        return data;
+    }else {
+        NSLog( @"DataOp: could not open DB" );
+        return nil;
+    }
+}
+
++ (NSArray *) preflopDataWithPlayerName:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    NSString *sql = [NSString stringWithFormat:@"select preflop from t_data"];
+    NSString *dbFilePath=[self getFilePath:DBFile];
+	FMDatabase *db=[FMDatabase databaseWithPath:dbFilePath];
+    if ( [db open] ) {
+        [db setShouldCacheStatements:YES];
+        NSMutableArray *data = [NSMutableArray array];
+        
+        FMResultSet *rs = [db executeQuery:sql];
+        int col = sqlite3_column_count(rs.statement.statement);
+        while ([rs next]) {
+            for (int i=0; i<col; i++) {
+                [data addObject:[rs stringForColumnIndex:i]];
+            }
+        }
+        
+        [rs close];
+        [db close];
+        
+        return data;
+    }else {
+        NSLog( @"DataOp: could not open DB" );
+        return nil;
+    }
+}
++ (NSArray *) postflopDataWithPlayerName:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    NSString *sql = [NSString stringWithFormat:@"select postflop from t_data"];
+}
+
++ (NSArray *) turnDataWithPlayerName:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    NSString *sql = [NSString stringWithFormat:@"select turn from t_data"];
+}
+
++ (NSArray *) riverDataWithPlayerName:(NSString *)_name playerID:(int)_id {
+    assert( _name );
+    assert( _id );
+    
+    NSString *sql = [NSString stringWithFormat:@"select river from t_data"];
+}
+
+
 @end

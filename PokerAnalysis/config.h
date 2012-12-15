@@ -43,4 +43,6 @@
 #define DEAD        0
 #define ALIVE       1
 
+#define MEMBER_SET      1
+#define MEMBER_ANALYSIS 2
 #endif
