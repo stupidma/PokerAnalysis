@@ -174,8 +174,6 @@
 				4C444436165C751E00EAA181 /* AppDelegate.h */,
 				4C444437165C751E00EAA181 /* AppDelegate.m */,
 				4C44442E165C751E00EAA181 /* Supporting Files */,
-				4CA4558F1662669000A3EFA5 /* Player.h */,
-				4CA455901662669000A3EFA5 /* Player.m */,
 				4C36A9DC1663BCE9000C4B18 /* config.h */,
 				4C7B789E166B95DF00C5FB0A /* MainViewController.h */,
 				4C7B789F166B95DF00C5FB0A /* MainViewController.m */,
@@ -211,6 +209,8 @@
 				4CECBA2116649BD000482442 /* DataOp.m */,
 				4C0D30961671E571002E9329 /* Players.h */,
 				4C0D30971671E571002E9329 /* Players.m */,
+				4CA4558F1662669000A3EFA5 /* Player.h */,
+				4CA455901662669000A3EFA5 /* Player.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -418,12 +418,12 @@
 		4C444448165C751E00EAA181 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Hongbin Suo (P739FP4WL8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: zhang guison (UAJR8EDTZH)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PokerAnalysis/PokerAnalysis-Prefix.pch";
 				INFOPLIST_FILE = "PokerAnalysis/PokerAnalysis-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "15EF1419-5246-463A-B26A-8705DD06DD8E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "172BF9F5-FCB4-4089-9DEB-7FFB576EF657";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

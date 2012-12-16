@@ -35,8 +35,13 @@
     IBOutlet UILabel    *riverRaise;
     IBOutlet UILabel    *riverFold;
     IBOutlet UILabel    *riverReRaise;
+    
+    NSMutableDictionary *players;
 }
 
 - (void) displayWithPlayerName:(NSString *)_name playerID:(int)_id;
-- (NSArray *) analysis:(NSArray *)_data;
+- (void) analysis:(NSArray *)_data stage:(int)_stage;
+- (const char *) nextData:(const char *)_data;
+- (const char *) positionWithData:(const char *)_data num:(int)_num;
+- (void) recordWithID:(const char *)_id action:(const char *)_action stage:(int)_stage;
 @end

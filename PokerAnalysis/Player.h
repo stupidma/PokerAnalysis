@@ -18,12 +18,20 @@
 @interface Player : NSObject {
     NSString    *name;
     
-    int         seatNum;
-    int         position;
+    int         playerID;
+
+    NSMutableDictionary  *preflop;
+    NSMutableDictionary  *postflop;
+    NSMutableDictionary  *turn;
+    NSMutableDictionary  *river;
 }
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic) int seatNum;
-@property (nonatomic) int position;
+@property (nonatomic, retain) NSMutableDictionary *preflop;
+@property (nonatomic, retain) NSMutableDictionary *postflop;
+@property (nonatomic, retain) NSMutableDictionary *turn;
+@property (nonatomic, retain) NSMutableDictionary *river;
+@property (nonatomic) int playerID;
 
-- (id) initWithName:(NSString *)_name seatNum:(int)_seatNum position:(int)_position;
+- (id) init;
+
 @end

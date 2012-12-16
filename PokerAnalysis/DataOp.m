@@ -198,8 +198,8 @@
 
 + (NSArray *) dataWithStage:(int)_stage {
     assert( _stage );
-    assert( _name );
-    assert( _id );
+//    assert( _name );
+//    assert( _id );
     
     NSString *gameStage = nil;
     switch ( _stage ) {

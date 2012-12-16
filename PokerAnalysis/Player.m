@@ -10,10 +10,24 @@
 
 @implementation Player
 
-@synthesize name = _name;
-@synthesize seatNum = _seatNum;
-@synthesize position = _position;
+@synthesize name;
+@synthesize playerID;
+@synthesize preflop;
+@synthesize postflop;
+@synthesize turn;
+@synthesize river;
 
 
+- (id) init {
+    self = [super init];
+    if ( self ) {
+        self.preflop = [NSMutableDictionary dictionary];
+        self.postflop = [NSMutableDictionary dictionary];
+        self.turn = [NSMutableDictionary dictionary];
+        self.river = [NSMutableDictionary dictionary];
+    }
+    
+    return self;
+}
 
 @end

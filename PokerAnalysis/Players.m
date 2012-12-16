@@ -27,7 +27,7 @@
         _PLAYER_INFO *pH = listHead;
         _PLAYER_INFO *pre = nil;
         while ( pH->next ) {
-            if ( _player->player_id < pH->player_id ) {
+            if ( _player->seat_num < pH->seat_num ) {
                 if ( pH == listHead ) {
                     listHead = _player;
                 }else {
@@ -43,7 +43,7 @@
     
         }
         
-        assert( _player->player_id > pH->player_id );
+        assert( _player->seat_num > pH->seat_num );
     
         pH->next = _player;
         listTail = _player;
